@@ -1,0 +1,110 @@
+.estado {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.estado.ativo {
+  display: block;
+  opacity: 1;
+}
+
+.label-senha {
+  color: white;
+  font-weight: bold;
+  font-size: 1.25rem;
+  margin-top: 1rem;
+}
+
+.senha {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.digit {
+  background-color: white;
+  color: black;
+  padding: 1rem;
+  font-weight: bold;
+  font-size: 1.2rem;
+  border-radius: 0.5rem;
+  min-width: 2.5rem;
+  text-align: center;
+}
+
+.senha-btn,
+.tempo-btn,
+.cancel-btn {
+  display: inline-block;
+  font-weight: bold;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  cursor: pointer;
+}
+
+.senha-btn {
+  background-color: #a52a0d;
+  color: white;
+}
+
+.tempo-btn {
+  background-color: gray;
+  color: white;
+  margin: 1rem 0;
+}
+
+.cancel-btn {
+  background-color: #a52a0d;
+  color: white;
+  margin-top: 1rem;
+}
+
+.section-title {
+  color: white;
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin: 1rem 0 0.5rem;
+  text-align: center;
+}
+
+.container {
+  background-color: #008a66; /* tom ligeiramente mais escuro para contraste */
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin: 1rem auto;
+  max-width: 300px;
+  border: 2px solid black;
+}
+
+
+/*Menu - Concluido*/
+
+#estado-concluido { display:none; }
+#estado-concluido.ativo { display:block; }
+
+
+#estado-concluido{
+  text-align:center;
+  padding:40px 30px;
+}
+
+#estado-concluido .titulo-final{
+  font-size:28px;
+  font-weight:700;
+  color:white;
+  margin-bottom:12px;
+}
+
+#estado-concluido .texto-final{
+  font-size:18px;
+  color:white;
+  opacity:.9;
+  margin-bottom:25px;
+}
+
+
+
+

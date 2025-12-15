@@ -1,0 +1,116 @@
+/* Reset básico */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #ffffff;
+  color: #000;
+  font-family: 'Segoe UI', sans-serif;
+  line-height: 1.6;
+}
+
+
+
+/* HEADER */
+header {
+  background-color: #00c271;
+  padding: 0.3rem 1.5rem;
+}
+
+.container-banner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem; 
+  height: 72px; 
+  box-sizing: border-box;
+}
+
+/* NAVIGATION LINKS */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-links a {
+  color: #000;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 0; 
+  margin: 0;
+  line-height: 1;
+}
+
+.nav-links a:hover {
+  text-decoration: underline;
+}
+
+
+
+
+
+
+
+
+/* FOOTER */
+footer {
+  background-color: #1b1b1b;
+  color: white;
+  padding: 2rem 1.5rem;
+}
+
+footer .footer-content {
+  max-width: 480px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.footer-brand {
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+
+
+.footer-brand img {
+  width: 24px;
+  height: 24px;
+}
+
+.footer-links {
+  margin-bottom: 1rem;
+}
+
+.footer-links a {
+  display: block;
+  color: #cccccc;
+  font-size: 0.85rem;
+  text-decoration: none;
+  margin-bottom: 0.4rem;
+}
+
+.footer-links a:hover {
+  color: #ffffff;
+}
+
+footer small {
+  display: block;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #888888;
+  margin-top: 1rem;
+}
+
+
+
+

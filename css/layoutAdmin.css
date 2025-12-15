@@ -1,0 +1,365 @@
+/* ---------- VARIÁVEIS ---------- */
+
+:root {
+  --cor-borda-janela: #111111;
+
+  --cor-fundo-pagina: #f6f6f6;
+  --cor-fundo-lateral: #f3e6d8;
+  --cor-fundo-conteudo: #ffffff;
+
+  --cor-principal: #f2b200;
+  --cor-botao-ativo: #efcd7c;
+
+  --cor-azul-suave: #e9f5ff;
+  --cor-rosa-suave: #ffeef7;
+  --cor-verde-suave: #e8ffef;
+
+  --cor-texto: #222222;
+  --cor-texto-suave: #8a8a8a;
+
+  --raio-md: 8px;
+  --raio-lg: 12px;
+
+  --sombra-suave: 0 4px 10px rgba(0, 0, 0, 0.05);
+
+  --espaco-md: 16px;
+  --espaco-lg: 24px;
+}
+
+/* ---------- RESET ---------- */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  background: var(--cor-fundo-pagina);
+  color: var(--cor-texto);
+}
+
+/* ---------- LAYOUT PRINCIPAL ---------- */
+
+.layout-principal {
+  height: 100vh;
+  border: 6px solid var(--cor-borda-janela);
+  display: flex;
+  background: var(--cor-fundo-conteudo);
+}
+
+/* ---------- BARRA LATERAL ---------- */
+
+.barra-lateral {
+  width: 240px;
+  background: var(--cor-fundo-lateral);
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.cabecalho-lateral {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.linha-titulo {
+  width: 4px;
+  height: 22px;
+  background: var(--cor-principal);
+  border-radius: 4px;
+  margin-right: 8px;
+}
+
+.titulo-lateral {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.cartao-logo {
+  margin: 18px 0 26px;
+}
+
+.imagem-logo {
+  max-width: 100%;
+  display: block;
+}
+
+/* UTILIZADOR */
+
+.secao-utilizador {
+  margin-bottom: 30px;
+}
+
+.nome-utilizador {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.cargo-utilizador {
+  font-size: 12px;
+  color: var(--cor-principal);
+}
+
+/* ---------- MENU LATERAL ---------- */
+
+.menu-lateral {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: auto;
+}
+
+.item-menu {
+  border: none;
+  background: transparent;
+  border-radius: 18px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--cor-texto);
+  text-decoration: none;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.item-menu:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.item-menu-ativo {
+  background: var(--cor-botao-ativo);
+  box-shadow: var(--sombra-suave);
+}
+
+/* ÍCONE NA SIDEBAR  */
+
+.icone-menu {
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+}
+
+.icone-menu img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* TEXTO DO MENU */
+
+.texto-menu {
+  white-space: nowrap;
+}
+
+/* ---------- RODAPÉ LATERAL / LOGOUT ---------- */
+
+.rodape-lateral {
+  margin-top: 40px;
+}
+
+.link-logout {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--cor-texto);
+  cursor: pointer;
+}
+
+.texto-logout {
+  font-size: 14px;
+}
+
+.icone-logout {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: 1.5px solid #2e2e2e;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f3e6d8;
+  overflow: hidden;
+}
+
+.icone-logout img {
+  max-width: 85%;
+  max-height: 85%;
+  object-fit: contain;
+}
+
+
+
+/* ---------- RESPONSIVO ---------- */
+
+@media (max-width: 900px) {
+  .layout-principal {
+    flex-direction: column;
+  }
+
+  .barra-lateral {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .area-conteudo {
+    padding: 16px;
+  }
+
+  .painel-resumo {
+    flex-wrap: wrap;
+  }
+}
+
+
+/* ============ GLOBAL SELECT STYLE ============ */
+
+select {
+  width: 100%;
+  padding: 10px 14px;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  color: #222;
+  background-color: #fff;
+
+  border: 1.5px solid #e3e3e3;
+  border-radius: 10px;
+
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+
+  /* remove estilo default */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  /* setinha custom */
+  background-image:
+    linear-gradient(45deg, transparent 50%, #999 50%),
+    linear-gradient(135deg, #999 50%, transparent 50%),
+    linear-gradient(to right, transparent, transparent);
+  background-position:
+    calc(100% - 18px) calc(50% - 3px),
+    calc(100% - 12px) calc(50% - 3px),
+    calc(100% - 2.2em) 0.5em;
+  background-size:
+    6px 6px,
+    6px 6px,
+    1px 1.8em;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+/* hover */
+select:hover {
+  border-color: #cfcfcf;
+}
+
+/* focus igual aos inputs bonitos */
+select:focus {
+  border-color: #ffb400; /* amarelo do teu tema */
+  box-shadow: 0 0 0 3px rgba(255, 180, 0, 0.20);
+}
+
+/* disabled */
+select:disabled {
+  background-color: #f5f5f5;
+  color: #888;
+  cursor: not-allowed;
+  border-color: #e0e0e0;
+}
+
+/* options */
+option {
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  color: #222;
+  background: #fff;
+  padding: 8px;
+}
+
+/* option disabled / placeholder */
+option:disabled {
+  color: #999;
+}
+
+
+/* ============ GLOBAL CHECKBOX STYLE (TICK VERDE) ============ */
+
+input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid #cfcfcf;
+  border-radius: 5px;
+  background: #fff;
+  cursor: pointer;
+  vertical-align: middle;
+
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  display: inline-grid;
+  place-content: center;
+
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+}
+
+/* tick verde desenhado com borda */
+input[type="checkbox"]::before {
+  content: "";
+  width: 9px;
+  height: 5px;
+
+  border-left: 2.5px solid #2fbf71;   /* VERDE */
+  border-bottom: 2.5px solid #2fbf71; /* VERDE */
+
+  transform: rotate(-45deg) scale(0);
+  transform-origin: center;
+  transition: transform 0.12s ease-in-out;
+}
+
+/* checked */
+input[type="checkbox"]:checked {
+  border-color: #2fbf71;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(47, 191, 113, 0.18);
+}
+
+input[type="checkbox"]:checked::before {
+  transform: rotate(-45deg) scale(1);
+}
+
+/* hover */
+input[type="checkbox"]:hover {
+  border-color: #bdbdbd;
+}
+
+/* focus teclado */
+input[type="checkbox"]:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(47, 191, 113, 0.22);
+}
+
+/* disabled */
+input[type="checkbox"]:disabled {
+  background: #f2f2f2;
+  border-color: #e0e0e0;
+  cursor: not-allowed;
+}
+
+input[type="checkbox"]:disabled::before {
+  border-color: #9a9a9a;
+}
+
