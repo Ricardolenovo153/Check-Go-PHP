@@ -1,125 +1,107 @@
+<?php
+// Check-Go/php-backend/views/editar_colaborador.php
+
+require_once __DIR__ . '/../middleware/AuthMiddleware.php';
+require_once __DIR__ . '/../controllers/ColaboradorController.php';
+require_once __DIR__ . '/../controllers/LojaController.php';
+
+$auth = new AuthMiddleware();
+$user = $auth->authorize(['Administrador', 'Gerente']);
+
+$colabController = new ColaboradorController();
+$lojaController = new LojaController();
+
+$id = $_GET['id'] ?? null;
+if (!$id) {
+    header('Location: gerir_colaboradores.php');
+    exit();
+}
+
+$colab = $colabController->obter($id, $user);
+if (!$colab || isset($colab['error'])) {
+    die($colab['error'] ?? 'Colaborador não encontrado.');
+}
+
+$lojas = $lojaController->listar();
+
+$message = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $dados = [
+        'nome' => $_POST['nome'],
+        'email' => $_POST['email'],
+        'role' => $_POST['role'],
+        'loja_id' => !empty($_POST['loja_id']) ? (int)$_POST['loja_id'] : null,
+        'ativo' => isset($_POST['ativo'])
+    ];
+    
+    if ($colabController->atualizar($id, $dados)) {
+        header('Location: gerir_colaboradores.php');
+        exit();
+    } else {
+        $message = 'Erro ao atualizar colaborador.';
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="pt">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin- Update Serviço</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/CRUD/updateServico.css" />
-    <link rel="stylesheet" href="/css/layoutAdmin.css" />
+  <meta charset="UTF-8">
+  <title>Editar Colaborador - Check-Go</title>
+  <link rel="stylesheet" href="../public/css/layoutAdmin.css">
+  <link rel="stylesheet" href="../public/css/CRUD/updateServico.css">
 </head>
+
 <body>
-    <div class="layout-principal">
-        <!-- BARRA LATERAL -->
-        <aside class="barra-lateral">
-          <div class="cabecalho-lateral">
-            <span class="linha-titulo"></span>
-            <span class="titulo-lateral">Administração</span>
-          </div>
-    
-          <div class="cartao-logo">
-            <img src="/imagens/Check_Go__3_-removebg-preview.png"
-                 alt="Logo Check&Go"
-                 class="imagem-logo" />
-          </div>
-    
-          <div class="secao-utilizador">
-            <div class="nome-utilizador">Tomás Ribeiro</div>
-            <div class="cargo-utilizador">Admin</div>
-          </div>
-    
-          <nav class="menu-lateral">
-            <a href="/views/admin/dashboard.html" class="item-menu item-menu-ativo">
-              <span class="icone-menu">
-                <img src="/imagens/icons/home.png" alt="Home">
-              </span>
-              <span class="texto-menu">Home</span>
-            </a>
-    
-            <a href="/views/admin/abaLoja/listaLoja.html" class="item-menu">
-              <span class="icone-menu">
-                <img src="/imagens/icons/lojas.png" alt="Lojas">
-              </span>
-              <span class="texto-menu">Lojas</span>
-            </a>
-    
-            <a href="/views/admin/abaColaborador/listaColaborador.html" class="item-menu">
-              <span class="icone-menu">
-                <img src="/imagens/icons/colaborador.png" alt="Colaboradores">
-              </span>
-              <span class="texto-menu">Colaboradores</span>
-            </a>
-    
-            <a href="/views/admin/abaServico/listaServico.html" class="item-menu">
-              <span class="icone-menu">
-                <img src="/imagens/icons/servicos.png" alt="Serviços">
-              </span>
-              <span class="texto-menu">Serviços</span>
-            </a>
-    
-            <a href="/views/colaborador/escolherservico.html" class="item-menu">
-              <span class="icone-menu">
-                <img src="/imagens/icons/voltarColab.png" alt="Voltar como Colab">
-              </span>
-              <span class="texto-menu">Voltar como Colab</span>
-            </a>
-          </nav>
-    
-          <div class="rodape-lateral">
-            <a href="/logout" class="link-logout">
-              <span class="texto-logout">Logout</span>
-              <span class="icone-logout">
-                <img src="/imagens/icons/logout.png" alt="Logout">
-              </span>
-            </a>
-          </div>
-        </aside>
-<!--UPDATE SERVIÇO -->
-        <main class="container">
-          <h1 class="titulo">Atualizar Colaborador</h1>
-
-          <form class="formulario" id="form-update-colab">
-
-            <div class="campo">
-              <label for="nome">Nome</label>
-              <input type="text" id="nome" name="nome" required>
-            </div>
-
-            <div class="campo">
-              <label for="email">Email</label>
-              <input type="email" id="email" name="email" required>
-            </div>
-
-            <div class="campo">
-              <label for="role">Role</label>
-              <select id="role" name="role" required>
-                <option value="Colaborador">Colaborador</option>
-                <option value="Gerente">Gerente</option>
-                <option value="Administrador">Administrador</option>
-              </select>
-            </div>
-
-            <div class="campo">
-              <label for="loja_id">Loja</label>
-              <select id="loja_id" name="loja_id">
-                <option value="">— Sem loja —</option>
-              </select>
-            </div>
-
-            <div class="campo">
-              <label>
-                <input id="ativo" type="checkbox" />
-                Ativo
-              </label>
-            </div>
-
-            <div class="botoes">
-              <button type="submit" class="btn-save">Save</button>
-            </div>
-
-          </form>
-        </main>
-
-  <script type="module" src="/js/colaborador/updateColaborador.js"></script>
+  <div class="container">
+    <header>
+      <h1>Editar Colaborador</h1>
+      <nav><a href="gerir_colaboradores.php" class="btn-voltar">Voltar</a></nav>
+    </header>
+    <main>
+      <?php if ($message): ?><p class="erro"><?php echo $message; ?></p><?php endif; ?>
+      <form method="POST" class="form-crud">
+        <div class="form-group">
+          <label>Nome:</label>
+          <input type="text" name="nome" value="<?php echo htmlspecialchars($colab['nome'] ?? ''); ?>" required>
+        </div>
+        <div class="form-group">
+          <label>Email:</label>
+          <input type="email" name="email" value="<?php echo htmlspecialchars($colab['email'] ?? ''); ?>" required>
+        </div>
+        <div class="form-group">
+          <label>Cargo:</label>
+          <select name="role" class="form-control">
+            <option value="Administrador" <?php echo ($colab['role'] ?? '') === 'Administrador' ? 'selected' : ''; ?>>
+              Administrador</option>
+            <option value="Gerente" <?php echo ($colab['role'] ?? '') === 'Gerente' ? 'selected' : ''; ?>>Gerente
+            </option>
+            <option value="Colaborador" <?php echo ($colab['role'] ?? '') === 'Colaborador' ? 'selected' : ''; ?>>
+              Colaborador</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Loja:</label>
+          <select name="loja_id" class="form-control">
+            <option value="">Nenhuma</option>
+            <?php foreach ($lojas as $l): ?>
+            <option value="<?php echo $l['id']; ?>"
+              <?php echo ($colab['loja_id'] ?? '') == $l['id'] ? 'selected' : ''; ?>>
+              <?php echo htmlspecialchars($l['nome'] ?? ''); ?>
+            </option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>
+            <input type="checkbox" name="ativo"
+              <?php echo (isset($colab['ativo']) && $colab['ativo']) ? 'checked' : ''; ?>> Ativo
+          </label>
+        </div>
+        <button type="submit" class="btn-guardar">Atualizar Colaborador</button>
+      </form>
+    </main>
+  </div>
 </body>
+
 </html>

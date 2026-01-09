@@ -1,135 +1,89 @@
+<?php
+// Check-Go/php-backend/views/criar_colaborador.php
+
+require_once __DIR__ . '/../middleware/AuthMiddleware.php';
+require_once __DIR__ . '/../controllers/ColaboradorController.php';
+require_once __DIR__ . '/../controllers/LojaController.php';
+
+$auth = new AuthMiddleware();
+$user = $auth->authorize(['Administrador', 'Gerente']);
+
+$lojaController = new LojaController();
+$lojas = $lojaController->listar();
+
+$message = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $colabController = new ColaboradorController();
+    
+    $dados = [
+        'nome' => $_POST['nome'],
+        'email' => $_POST['email'],
+        'password' => $_POST['password'],
+        'role' => $_POST['role'],
+        'loja_id' => !empty($_POST['loja_id']) ? (int)$_POST['loja_id'] : null,
+        'ativo' => true
+    ];
+    
+    if ($colabController->criar($dados)) {
+        header('Location: gerir_colaboradores.php');
+        exit();
+    } else {
+        $message = 'Erro ao criar colaborador.';
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="pt">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin- Criar Serviço</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/CRUD/criarServico.css" />
-    <link rel="stylesheet" href="/css/layoutAdmin.css" />
+  <meta charset="UTF-8">
+  <title>Novo Colaborador - Check-Go</title>
+  <link rel="stylesheet" href="../public/css/layoutAdmin.css">
+  <link rel="stylesheet" href="../public/css/CRUD/criarServico.css">
 </head>
+
 <body>
-    <div class="layout-principal">
-        <!-- BARRA LATERAL -->
-        <aside class="barra-lateral">
-          <div class="cabecalho-lateral">
-            <span class="linha-titulo"></span>
-            <span class="titulo-lateral">Administração</span>
-          </div>
-    
-          <div class="cartao-logo">
-            <img src="/imagens/Check_Go__3_-removebg-preview.png"
-                 alt="Logo Check&Go"
-                 class="imagem-logo" />
-          </div>
-    
-          <div class="secao-utilizador">
-            <div class="nome-utilizador">Tomás Ribeiro</div>
-            <div class="cargo-utilizador">Admin</div>
-          </div>
-    
-          <nav class="menu-lateral">
-            <a href="/views/admin/dashboard.html" class="item-menu item-menu-ativo">
-              <span class="icone-menu">
-                <img src="/imagens/icons/home.png" alt="Home">
-              </span>
-              <span class="texto-menu">Home</span>
-            </a>
-    
-            <a href="/views/admin/abaLoja/listaLoja.html" class="item-menu">
-              <span class="icone-menu">
-                <img src="/imagens/icons/lojas.png" alt="Lojas">
-              </span>
-              <span class="texto-menu">Lojas</span>
-            </a>
-    
-            <a href="/views/admin/abaColaborador/listaColaborador.html" class="item-menu">
-              <span class="icone-menu">
-                <img src="/imagens/icons/colaborador.png" alt="Colaboradores">
-              </span>
-              <span class="texto-menu">Colaboradores</span>
-            </a>
-    
-            <a href="/views/admin/abaServico/listaServico.html" class="item-menu">
-              <span class="icone-menu">
-                <img src="/imagens/icons/servicos.png" alt="Serviços">
-              </span>
-              <span class="texto-menu">Serviços</span>
-            </a>
-    
-            <a href="/views/colaborador/escolherservico.html" class="item-menu">
-              <span class="icone-menu">
-                <img src="/imagens/icons/voltarColab.png" alt="Voltar como Colab">
-              </span>
-              <span class="texto-menu">Voltar como Colab</span>
-            </a>
-          </nav>
-    
-          <div class="rodape-lateral">
-            <a href="/logout" class="link-logout">
-              <span class="texto-logout">Logout</span>
-              <span class="icone-logout">
-                <img src="/imagens/icons/logout.png" alt="Logout">
-              </span>
-            </a>
-          </div>
-        </aside>
-
-<!--CRIAR COLABORADOR -->
-    <main class="area-conteudo estilo-limpo">
-      <div class="pagina-titulo">
-          <h1>Criar Colaborador</h1>
-      </div>
-
-      <div class="formulario-container">
-        <form class="form-criar-colaborador" id="form-criar-colab">
-
-          <div class="campo-form">
-            <label for="nome">Nome</label>
-            <input id="nome" type="text" required />
-          </div>
-
-          <div class="campo-form">
-            <label for="email">Email</label>
-            <input id="email" type="email" required />
-          </div>
-
-          <div class="campo-form">
-            <label for="password">Password</label>
-            <input id="password" type="password" required />
-          </div>
-
-          <div class="campo-form">
-            <label for="role">Role</label>
-            <select id="role" required>
-              <option value="Colaborador">Colaborador</option>
-              <option value="Gerente">Gerente</option>
-              <option value="Administrador">Administrador</option>
-            </select>
-          </div>
-
-          <div class="campo-form">
-            <label for="loja_id">Loja</label>
-            <select id="loja_id">
-              <option value="">— Sem loja —</option>
-            </select>
-          </div>
-
-          <div class="campo-form">
-            <label>
-              <input id="ativo" type="checkbox" checked />
-              Ativo
-            </label>
-          </div>
-
-          <div class="botoes-form">
-            <button type="button" id="cancelar" class="btn-cancelar">Cancelar</button>
-            <button type="submit" class="btn-salvar">Criar</button>
-          </div>
-
-        </form>
-      </div>
+  <div class="container">
+    <header>
+      <h1>Novo Colaborador</h1>
+      <nav><a href="gerir_colaboradores.php" class="btn-voltar">Voltar</a></nav>
+    </header>
+    <main>
+      <?php if ($message): ?><p class="erro"><?php echo $message; ?></p><?php endif; ?>
+      <form method="POST" class="form-crud">
+        <div class="form-group">
+          <label>Nome:</label>
+          <input type="text" name="nome" required>
+        </div>
+        <div class="form-group">
+          <label>Email:</label>
+          <input type="email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label>Palavra-passe:</label>
+          <input type="password" name="password" required>
+        </div>
+        <div class="form-group">
+          <label>Cargo:</label>
+          <select name="role" class="form-control">
+            <option value="Colaborador">Colaborador</option>
+            <option value="Gerente">Gerente</option>
+            <option value="Administrador">Administrador</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Loja:</label>
+          <select name="loja_id" class="form-control">
+            <option value="">Nenhuma</option>
+            <?php foreach ($lojas as $l): ?>
+            <option value="<?php echo $l['id']; ?>"><?php echo htmlspecialchars($l['nome'] ?? ''); ?></option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+        <button type="submit" class="btn-guardar">Criar Colaborador</button>
+      </form>
     </main>
-    <script type="module" src="/js/colaborador/criarColaborador.js"></script>
+  </div>
 </body>
+
 </html>
