@@ -1,0 +1,26 @@
+name: Deploy to Hostinger 🚀
+
+on:
+  push:
+    branches:
+      - main  # Confirma se o teu branch se chama 'main' ou 'master'
+
+jobs:
+  web-deploy:
+    name: 🎉 Deploy via FTP
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v4
+
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        server-dir: /  # Como o teu FTP já abre na raiz do site, deixa apenas a barra /
+        exclude: |
+          **/.git*
+          **/.github*
+          README.md
