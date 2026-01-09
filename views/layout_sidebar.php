@@ -5,9 +5,7 @@ function renderSidebar($user, $activePage) {
     $nome = htmlspecialchars($user['nome'] ?? 'Utilizador');
     $role = htmlspecialchars($user['role'] ?? 'Cargo');
     
-    // --- CONFIGURAÇÃO DOS CAMINHOS ---
-    // Ajustado conforme a tua estrutura: public/imagens/icons/
-    // Se o site não carregar as imagens, tenta remover o "/public" do início das strings abaixo.
+
     $pathIcons = "/public/imagens/icons/"; 
     $pathLogo  = "/public/imagens/Check_Go__3_-removebg-preview.png"; 
     
