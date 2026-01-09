@@ -28,7 +28,72 @@ $lojas = $controller->listar();
   <link rel="stylesheet" href="../public/css/layoutAdmin.css">
   <link rel="stylesheet" href="../public/css/CRUD/listaLoja.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+  .area-conteudo {
+    flex: 1;
+    padding: 40px;
+    overflow-y: auto;
+  }
 
+  .cabecalho-pagina {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+
+  .titulo-pagina {
+    font-size: 24px;
+    font-weight: 700;
+  }
+
+  .btn-adicionar {
+    background: var(--cor-principal);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .tabela-custom {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+  }
+
+  .tabela-custom th {
+    text-align: left;
+    padding: 12px;
+    color: var(--cor-texto-suave);
+    font-size: 12px;
+    text-transform: uppercase;
+    border-bottom: 1px solid #eee;
+  }
+
+  .tabela-custom td {
+    padding: 15px 12px;
+    border-bottom: 1px solid #f9f9f9;
+    font-size: 14px;
+  }
+
+  .acoes-icones {
+    display: flex;
+    gap: 10px;
+  }
+
+  .btn-acao {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ddd;
+    text-decoration: none;
+  }
+  </style>
 </head>
 
 <body>
