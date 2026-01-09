@@ -1,116 +1,89 @@
+<?php
+// Check-Go/php-backend/views/criar_loja.php
+
+require_once __DIR__ . '/../middleware/AuthMiddleware.php';
+require_once __DIR__ . '/../controllers/LojaController.php';
+require_once __DIR__ . '/../controllers/ServicoController.php';
+
+$auth = new AuthMiddleware();
+$user = $auth->authorize(['Administrador']);
+
+$lojaController = new LojaController();
+$servicoController = new ServicoController();
+
+$todosServicos = $servicoController->listar();
+$gerentes = $lojaController->listarGerentesDisponiveis();
+
+$message = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $dados = [
+        'nome' => $_POST['nome'],
+        'morada' => $_POST['morada'],
+        'gerente_id' => !empty($_POST['gerente_id']) ? (int)$_POST['gerente_id'] : null
+    ];
+    $servicosSelecionados = $_POST['servicos'] ?? [];
+    
+    if ($lojaController->criar($dados, $servicosSelecionados)) {
+        header('Location: gerir_lojas.php');
+        exit();
+    } else {
+        $message = 'Erro ao criar loja.';
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="pt">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin- Criar Serviço</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/CRUD/criarServico.css" />
-    <link rel="stylesheet" href="/css/layoutAdmin.css" />
+  <meta charset="UTF-8">
+  <title>Criar Loja - Check-Go</title>
+  <link rel="stylesheet" href="../public/css/layoutAdmin.css">
+  <link rel="stylesheet" href="../public/css/CRUD/criarServico.css">
 </head>
+
 <body>
-    <div class="layout-principal">
-        <!-- BARRA LATERAL -->
-        <aside class="barra-lateral">
-          <div class="cabecalho-lateral">
-            <span class="linha-titulo"></span>
-            <span class="titulo-lateral">Administração</span>
+  <div class="container">
+    <header>
+      <h1>Nova Loja</h1>
+      <nav><a href="gerir_lojas.php" class="btn-voltar">Voltar</a></nav>
+    </header>
+    <main>
+      <?php if ($message): ?><p class="erro"><?php echo $message; ?></p><?php endif; ?>
+      <form method="POST" class="form-crud">
+        <div class="form-group">
+          <label>Nome da Loja:</label>
+          <input type="text" name="nome" required>
+        </div>
+        <div class="form-group">
+          <label>Morada:</label>
+          <input type="text" name="morada" required>
+        </div>
+        <div class="form-group">
+          <label>Gerente Responsável:</label>
+          <select name="gerente_id" class="form-control"
+            style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+            <option value="">Selecione um Gerente (Opcional)</option>
+            <?php foreach ($gerentes as $g): ?>
+            <option value="<?php echo $g['id']; ?>"><?php echo htmlspecialchars($g['nome']); ?></option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Serviços Disponíveis:</label>
+          <div class="checkbox-group"
+            style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #f9f9f9; padding: 15px; border-radius: 5px;">
+            <?php foreach ($todosServicos as $s): ?>
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="checkbox" name="servicos[]" value="<?php echo $s['id']; ?>">
+              <?php echo htmlspecialchars($s['nome'] ?? ''); ?>
+            </label>
+            <?php endforeach; ?>
           </div>
-    
-          <div class="cartao-logo">
-            <img src="/imagens/Check_Go__3_-removebg-preview.png"
-                 alt="Logo Check&Go"
-                 class="imagem-logo" />
-          </div>
-    
-          <div class="secao-utilizador">
-            <div class="nome-utilizador">Tomás Ribeiro</div>
-            <div class="cargo-utilizador">Admin</div>
-          </div>
-    
-          <nav class="menu-lateral">
-            <a href="/views/admin/dashboard.html" class="item-menu item-menu-ativo">
-              <span class="icone-menu">
-                <img src="/imagens/icons/home.png" alt="Home">
-              </span>
-              <span class="texto-menu">Home</span>
-            </a>
-    
-            <a href="/views/admin/abaLoja/listaLoja.html" class="item-menu">
-              <span class="icone-menu">
-                <img src="/imagens/icons/lojas.png" alt="Lojas">
-              </span>
-              <span class="texto-menu">Lojas</span>
-            </a>
-    
-            <a href="/views/admin/abaColaborador/listaColaborador.html" class="item-menu">
-              <span class="icone-menu">
-                <img src="/imagens/icons/colaborador.png" alt="Colaboradores">
-              </span>
-              <span class="texto-menu">Colaboradores</span>
-            </a>
-    
-            <a href="/views/admin/abaServico/listaServico.html" class="item-menu">
-              <span class="icone-menu">
-                <img src="/imagens/icons/servicos.png" alt="Serviços">
-              </span>
-              <span class="texto-menu">Serviços</span>
-            </a>
-    
-            <a href="/views/colaborador/escolherservico.html" class="item-menu">
-              <span class="icone-menu">
-                <img src="/imagens/icons/voltarColab.png" alt="Voltar como Colab">
-              </span>
-              <span class="texto-menu">Voltar como Colab</span>
-            </a>
-          </nav>
-    
-          <div class="rodape-lateral">
-            <a href="/logout" class="link-logout">
-              <span class="texto-logout">Logout</span>
-              <span class="icone-logout">
-                <img src="/imagens/icons/logout.png" alt="Logout">
-              </span>
-            </a>
-          </div>
-        </aside>
-
-<!--CRIAR LOJA -->
-    <main class="area-conteudo estilo-limpo">
-      <div class="pagina-titulo">
-          <h1>Criar Loja</h1>
-      </div>
-
-      <div class="formulario-container">
-        <form class="form-criar-servico" id="form-criar-loja">
-
-          <div class="campo-form">
-            <label for="nome">Nome</label>
-            <input type="text" id="nome" name="nome" placeholder="Nome da loja" required />
-          </div>
-
-          <div class="campo-form">
-            <label for="morada">Morada</label>
-            <textarea id="morada" name="morada" rows="4" placeholder="Morada da loja"></textarea>
-          </div>
-
-          <div class="campo-form">
-            <label>Serviços (mín. 1)</label>
-            <div id="lista-servicos-checkboxes" class="lista-servicos-checkboxes"></div>
-          </div>
-
-          <div class="campo-form">
-            <label for="gerente_id">Gerente ID (opcional)</label>
-            <input type="number" id="gerente_id" name="gerente_id" placeholder="ID do gerente" />
-          </div>
-
-          <div class="botoes-form">
-            <button type="button" class="btn-cancelar">Cancel</button>
-            <button type="submit" class="btn-salvar">Save</button>
-          </div>
-        </form>
-      </div>
+        </div>
+        <button type="submit" class="btn-guardar" style="margin-top: 20px;">Criar Loja</button>
+      </form>
     </main>
-    <script type="module" src="/js/loja/criarLoja.js"></script>
+  </div>
 </body>
+
 </html>
