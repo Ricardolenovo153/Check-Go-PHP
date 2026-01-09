@@ -67,7 +67,44 @@ class ColaboradorController {
         } catch (PDOException $e) {
             return null;
         }
-    } 
+    }
 
+    public function criar($dados) {
+        if ($this->db === null) return false;
+        try {
+            $passCol = $this->getPasswordColumn();
+            $query = "INSERT INTO users (nome, email, {$passCol}, role, loja_id, ativo) 
+                      VALUES (:nome, :email, :password, :role, :loja_id, :ativo)";
+            $stmt = $this->db->prepare($query);
+            return $stmt->execute($dados);
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    public function atualizar($id, $dados) {
+        if ($this->db === null) return false;
+        try {
+            $query = "UPDATE users SET nome = :nome, email = :email, role = :role, 
+                      loja_id = :loja_id, ativo = :ativo WHERE id = :id";
+            $stmt = $this->db->prepare($query);
+            $dados['id'] = $id;
+            return $stmt->execute($dados);
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    public function eliminar($id) {
+        if ($this->db === null) return false;
+        try {
+            $query = "DELETE FROM users WHERE id = :id";
+            $stmt = $this->db->prepare($query);
+            $stmt->bindParam(':id', $id);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
 }
 ?>

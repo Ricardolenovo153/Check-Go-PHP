@@ -10,7 +10,11 @@ $user = $auth->authorize(['Administrador', 'Gerente']);
 
 $controller = new ColaboradorController();
 
-
+if (isset($_GET['eliminar'])) {
+    $controller->eliminar($_GET['eliminar']);
+    header('Location: gerir_colaboradores.php');
+    exit();
+}
 
 $colaboradores = $controller->listar($user);
 ?>
